@@ -1,5 +1,7 @@
 # Welcome to your CDK TypeScript project
 
+aws cdk code to deploy a s3 static webiste.
+
 You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`S3Stack`)
 which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
 

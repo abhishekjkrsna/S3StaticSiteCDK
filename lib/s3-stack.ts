@@ -1,19 +1,18 @@
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as sqs from 'aws-cdk-lib/aws-sqs';
-import { Construct } from 'constructs';
+import * as s3 from "aws-cdk-lib/aws-s3";
+import { Construct } from "constructs";
+import { Stack, CfnOutput, StackProps } from "aws-cdk-lib";
+import S3Construct from "./s3-construct";
 
-export class S3Stack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+export default class S3Stack extends Stack {
+  public readonly _s3Bucket: s3.Bucket;
+
+  constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
-    const queue = new sqs.Queue(this, 'S3Queue', {
-      visibilityTimeout: Duration.seconds(300)
+    this._s3Bucket = new S3Construct(this, "s3Stack").bucket;
+
+    new CfnOutput(this, "webisteURL", {
+      value: this._s3Bucket.bucketWebsiteUrl,
     });
-
-    const topic = new sns.Topic(this, 'S3Topic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
   }
 }
